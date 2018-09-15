@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Ajax Category Select</title>
+    <style>
+      #subcategory-select {
+        display: none;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <div id="form">
+      <p>Which category are you interested in?</p>
+      <select id="category-select">
+        <option disabled selected>Please select</option>
+        <option value="1">Furniture</option>
+        <option value="2">Lighting</option>
+        <option value="3">Accessories</option>
+      </select>
+      <select id="subcategory-select">
+      </select>
+    </div>
+
+    <script>
+      function updateSubcategories() {
+        var cat_select = document.getElementById("category-select");
+        var subcat_select = document.getElementById("subcategory-select");
+
+        var cat_id = cat_select.options[cat_select.selectedIndex].value;//1,2 or 3
+// alt: var cat_id = this.options[this.selectedIndex].value;
+        var url = 'subcategories.php?category_id=' + cat_id;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function () {
+          if(xhr.readyState == 4 && xhr.status == 200) {
+            subcat_select.innerHTML = xhr.responseText;
+            subcat_select.style.display = 'inline';
+            // alt: using json:
+            // var subcategories = JSON.parse(xhr.responseText);
+            // var options = "";
+            // for (var i = 0; i < subcategories.length; i++) {
+            //   options += '<option value="subcategories[i][\'id\']">';
+            //   options += subcategories[i]['name'];
+            //   options += '</option>';
+            // }
+            // subcat_select.innerHTML = options;
+            // subcat_select.style.display = 'inline';              
+          }
+        }
+        xhr.send();
+      }
+
+      var cat_select = document.getElementById("category-select");
+      cat_select.addEventListener("change", updateSubcategories);
+    </script>
+
+  </body>
+</html>

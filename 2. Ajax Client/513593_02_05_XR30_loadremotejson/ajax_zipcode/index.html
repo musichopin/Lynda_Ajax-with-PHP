@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Ajax Zip Code</title>
+    <style>
+      #entry {
+        margin: 2em 1em;
+      }
+      #location {
+        margin: 1em;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="entry">
+      Zip code: <input id="zipcode" type="text" name="zipcode" />
+      <button id="ajax-button" type="button">Submit</button>
+    </div>
+
+    <div id="location">
+    </div>
+
+    <script>
+      // Google asks for all API users to sign up for an API key
+      // For simple tests, still works without an API key
+      var api = 'http://maps.googleapis.com/maps/api/geocode/json';
+
+      function findLocation() {
+        var zipcode = document.getElementById('zipcode');
+        var url = api + '?address=' + zipcode.value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function () {
+          if(xhr.readyState < 4) { // we didnt get back full response yet
+            showLoading();
+          }
+          if(xhr.readyState == 4 && xhr.status == 200) { // full response & successful
+            outputLocation(xhr.responseText);
+          }
+        };
+        xhr.send();
+      }
+
+      function showLoading() {
+        var target = document.getElementById('location');
+        target.innerHTML = 'Loading...';
+      }
+
+      function outputLocation(data) {
+        var target = document.getElementById('location');
+        var json = JSON.parse(data);
+        var address = json.results[0].formatted_address;
+// alt: json['results'][0]['formatted_address'];
+        target.innerHTML = address;
+      }
+
+      var button = document.getElementById ("ajax-button");
+      button.addEventListener("click", findLocation);
+    </script>
+
+  </body>
+</html>
