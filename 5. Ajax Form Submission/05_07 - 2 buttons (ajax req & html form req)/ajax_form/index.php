@@ -19,6 +19,7 @@
 
     <div id="measurements">
       <p>Enter measurements below to determine the total volume.</p>
+<!-- action is necessary for submit button (not ajax submit) -->      
       <form id="measurement-form" action="process_measurements.php" method="POST">
         Length: <input type="text" name="length" /><br />
         <br />
@@ -26,10 +27,11 @@
         <br />
         Height: <input type="text" name="height" /><br />
         <br />
-<!-- html form request for js disabled users: -->        
-        <input id="html-submit" type="submit" value="Submit" /> 
-        <!-- alt: <button id="html-submit">Submit</button> -->
-<!-- ajax request for js enabled users: -->        
+<!-- html form request (direct php) for js disabled users: -->        
+        <input id="html-submit" type="submit" value="Html Submit" /> 
+        <!-- alt1: <button id="html-submit">Submit</button> -->
+        <!-- alt2: <button id="html-submit" type="submit">Submit</button> -->
+<!-- ajax request (js+php) for js enabled users (action attr önemsiz): -->        
         <input id="ajax-submit" type="button" value="Ajax Submit" />
       </form>
     </div>
@@ -42,7 +44,7 @@
       <p>The total volume is: <span id="volume"></span></p>
     </div>
 
-    <script>
+    <script> //only necessary for ajax submit button
 
       var result_div = document.getElementById("result");
       var volume = document.getElementById("volume");
@@ -61,16 +63,19 @@
 
       function disableSubmitButton() {
         button.disabled = true;
+        // alt: button.style.display = 'none';
         button.value = 'Loading...';
       }
 
       function enableSubmitButton() {
         button.disabled = false;
+        // alt: button.style.display = 'inline';
         button.value = orig_button_value;
       }
 
-      function displayErrors(errors) {
+      function displayErrors(errors) { // errors is array
         var inputs = document.getElementsByTagName('input');
+        // console.log(inputs)
         for(i=0; i < inputs.length; i++) {
           var input = inputs[i];
           if(errors.indexOf(input.name) >= 0) {
@@ -96,7 +101,7 @@
         result_div.style.display = 'none';
       }
 
-      // omits textareas, select-options, checkboxes, radio buttons
+//not used: omits textareas, select-options, checkboxes, radio buttons
       function gatherFormData(form) {
         var inputs = form.getElementsByTagName('input');
         var array = [];
@@ -117,6 +122,7 @@
         var action = form.getAttribute("action");
 
         // gather form data
+// instead of calling gatherFormData() above we used FormData obj        
         var form_data = new FormData(form);
         for ([key, value] of form_data.entries()) {
           console.log(key + ': ' + value);
@@ -130,15 +136,16 @@
         xhr.onreadystatechange = function () {
           if(xhr.readyState == 4 && xhr.status == 200) {
             var result = xhr.responseText;
-            console.log('Result: ' + result);
+            console.log(result);
 
             hideSpinner();
             enableSubmitButton();
 
             var json = JSON.parse(result);
-            if(json.hasOwnProperty('errors') && json.errors.length > 0) {
-              displayErrors(json.errors);
-            } else {
+            console.log(json)
+            if(json.hasOwnProperty('errorss') && json.errorss.length > 0) {
+              displayErrors(json.errorss);
+            } else if (json.hasOwnProperty('volume')) { // no error
               postResult(json.volume);
             }
           }

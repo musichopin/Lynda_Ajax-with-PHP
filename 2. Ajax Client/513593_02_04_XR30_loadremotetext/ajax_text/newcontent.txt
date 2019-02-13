@@ -1,0 +1,1 @@
+This is the new content which has been loaded by Ajax (instead of being a .txt file this cud also be an html page surrounded by tags like div and span)

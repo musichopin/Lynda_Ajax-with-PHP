@@ -23,9 +23,10 @@
             target.innerHTML = 'Loading...';
           }
           if(xhr.readyState == 4 && xhr.status == 200) {
-            var json = JSON.parse(xhr.responseText); // json string turns into json
-
+            var json = JSON.parse(xhr.responseText); // JSON.parse() converts the string containing json into json
             target.innerHTML = json.long;
+            console.log(xhr.responseText);
+            console.log(json);
           }
         }
         xhr.send();

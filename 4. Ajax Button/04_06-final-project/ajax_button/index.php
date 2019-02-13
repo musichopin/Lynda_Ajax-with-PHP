@@ -1,11 +1,12 @@
 <?php
+//*session is used for displaying the hearts after refreshing the page. if we didnt call is_favorite() on three divs below we wudnt be able to display the hearts when we refresh the page (though we could toggle the hearts without refreshing using ajax request)*
   session_start();
 
+// used if cookie of the page is deleted
   if(!isset($_SESSION['favorites'])) { $_SESSION['favorites'] = []; }
 
-// this func helps display the hearts 4 when we refresh the page
   function is_favorite($id) {
-    return in_array($id, $_SESSION['favorites']);
+    return in_array($id, $_SESSION['favorites']); // value & array
   }
 
 ?>
@@ -36,17 +37,17 @@
       }
 
 /*below 4 styling displays favorite/unfavorite buttons alternately*/
-      button.favorite-button {
+      button.favorite-button { /*when fav button isnt clicked*/
         display: inline;
       }
-      button.unfavorite-button {
+      button.unfavorite-button { /*when fav button isnt clicked*/
         display: none;
       }
-      .favorite button.unfavorite-button {
+      .favorite button.favorite-button { /*when fav button is clicked*/
+        display: none;
+      }
+      .favorite button.unfavorite-button { /*when fav button is clicked*/
         display: inline;
-      }
-      .favorite button.favorite-button {
-        display: none;
       }
 
       .favorite-heart {
@@ -56,7 +57,7 @@
         display: none;
       }
       .favorite .favorite-heart {
-        display: block; /*makes heart get displayed when fav button clicked*/
+        display: block; /*makes heart visible when fav button clicked*/
       }
     </style>
   </head>
@@ -101,7 +102,7 @@
             var result = xhr.responseText;
             console.log('Result: ' + result);
             if(result == 'true') {
-              parent.classList.add("favorite"); // gets heart displayed
+              parent.classList.add("favorite"); // makes heart visible
             }
           }
         };
@@ -136,6 +137,7 @@
       var buttons = document.getElementsByClassName("unfavorite-button");
       for(i=0; i < buttons.length; i++) {
         buttons.item(i).addEventListener("click", unfavorite);
+// alt: buttons[i].addEventListener("click", unfavorite);        
       }
     </script>
 

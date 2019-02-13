@@ -6,6 +6,7 @@
     <style>
       #blog-posts {
         width: 700px;
+        margin: 0 auto;
       }
       .blog-post {
         border: 1px solid black;
@@ -32,24 +33,25 @@
     <script>
 
       var container = document.getElementById('blog-posts');
-      var load_more = document.getElementById('load-more');
+      var load_more_button = document.getElementById('load-more');
+      var spinner = document.getElementById("spinner");
 
       function showSpinner() {
-        var spinner = document.getElementById("spinner");
         spinner.style.display = 'block';
       }
 
       function hideSpinner() {
-        var spinner = document.getElementById("spinner");
         spinner.style.display = 'none';
       }
 
-      function showLoadMore() {
-        load_more.style.display = 'inline';
+      function showLoadMoreButton() {
+        load_more_button.parentElement.style.display = 'inline';
+        // alt: load_more_button.disabled = false;
       }
 
-      function hideLoadMore() {
-        load_more.style.display = 'none';
+      function hideLoadMoreButton() {
+        load_more_button.parentElement.style.display = 'none';
+        // alt: load_more_button.disabled = true;
       }
 
       function appendToDiv(div, new_html) {
@@ -71,15 +73,15 @@
 
       function setCurrentPage(page) {
         console.log('Incrementing page to: ' + page);
-        load_more.setAttribute('data-page', page);
+        load_more_button.setAttribute('data-page', page);
       }
 
       function loadMore() {
 
         showSpinner();
-        hideLoadMore();
+        hideLoadMoreButton();
 
-        var page = parseInt(load_more.getAttribute('data-page'));
+        var page = parseInt(load_more_button.getAttribute('data-page'));
         var next_page = page + 1;
 
         var xhr = new XMLHttpRequest();
@@ -88,20 +90,20 @@
         xhr.onreadystatechange = function () {
           if(xhr.readyState == 4 && xhr.status == 200) {
             var result = xhr.responseText;
-            console.log('Result: ' + result);
 
             hideSpinner();
             setCurrentPage(next_page);
-            // append results to end of blog posts
             appendToDiv(container, result);
-            showLoadMore();
-
+//append results 2 end of blog posts            
+            showLoadMoreButton();
+            
+            console.log('Result: ' + result);
           }
         };
         xhr.send();
       }
 
-      load_more.addEventListener("click", loadMore);
+      load_more_button.addEventListener("click", loadMore);
 
       // Load even the first page with Ajax
       loadMore();

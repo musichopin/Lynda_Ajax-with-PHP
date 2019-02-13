@@ -32,13 +32,13 @@ $categories = [
 
   $category_id = isset($_GET['category_id']) ? (int) $_GET['category_id'] : 0;
 
-  foreach($categories as $category) {
+  foreach ($categories as $category) {
     if($category['id'] == $category_id) { // iterated category id matches requested id
 
       $subcategories = $category['subcategories'];
 
-      foreach($subcategories as $subcategory) {
-        echo "<option value=\"{$subcategory['id']}\">";
+      foreach ($subcategories as $subcategory) {
+        echo "<option value='{$subcategory["id"]}'>"; //alt1, alt2
         echo $subcategory['name'];
         echo "</option>";
       }
@@ -46,5 +46,10 @@ $categories = [
       // echo json_encode($subcategories);
     }
   }
+// alt1: easier to read:
+// echo "<option value=".$subcategory['id'].">"; //alt1
+
+// alt2: harder to read:
+// echo "<option value=\"{$subcategory['id']}\">";
 
 ?>

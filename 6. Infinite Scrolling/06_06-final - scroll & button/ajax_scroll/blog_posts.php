@@ -9,14 +9,14 @@
 
   // Typically, this would be a call to a database
   function find_blog_posts($page) {
-    $first_post = 101;
+    $first_post = 101; //id of first post
     $per_page = 3; // posts per page
-    $offset = (($page - 1) * $per_page) + 1;
+    $offset = (($page - 1) * $per_page) + 1; //1,4,7,10 etc
 
     $blog_posts = [];
     // This is our "fake" database
     for($i=0; $i < $per_page; $i++) {
-      $id = $first_post - 1 + $offset + $i;
+      $id = $first_post + $offset - 1 + $i;
       $blog_post = [
         'id' => $id,
         'title' => "Blog Post #{$id}",
@@ -41,4 +41,4 @@
   </div>
 <?php } ?>
 <!-- alt: we cud have looped inside index.php using JSON.parse() there:
-json.encode($blog_posts); -->
+echo json.encode($blog_posts); -->

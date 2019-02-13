@@ -25,36 +25,42 @@
     </div>
 
     <script>
+      var cat_select = document.getElementById("category-select");
+
       function updateSubcategories() {
-        var cat_select = document.getElementById("category-select");
         var subcat_select = document.getElementById("subcategory-select");
-
         var cat_id = cat_select.options[cat_select.selectedIndex].value;//1,2 or 3
-// alt: var cat_id = this.options[this.selectedIndex].value;
+// alt1: var cat_id = this.options[this.selectedIndex].value;
+// alt2: this.value
         var url = 'subcategories.php?category_id=' + cat_id;
-
+// sends parameter data to subcategories.php
         var xhr = new XMLHttpRequest();
+
         xhr.open('GET', url, true);
+
         xhr.onreadystatechange = function () {
+
           if(xhr.readyState == 4 && xhr.status == 200) {
             subcat_select.innerHTML = xhr.responseText;
+            console.log(xhr.responseText)
             subcat_select.style.display = 'inline';
             // alt: using json:
             // var subcategories = JSON.parse(xhr.responseText);
             // var options = "";
             // for (var i = 0; i < subcategories.length; i++) {
-            //   options += '<option value="subcategories[i][\'id\']">';
+            //   options += '<option value="'+ subcategories[i].id +'">';
             //   options += subcategories[i]['name'];
             //   options += '</option>';
             // }
+            
             // subcat_select.innerHTML = options;
             // subcat_select.style.display = 'inline';              
           }
         }
+
         xhr.send();
       }
 
-      var cat_select = document.getElementById("category-select");
       cat_select.addEventListener("change", updateSubcategories);
     </script>
 

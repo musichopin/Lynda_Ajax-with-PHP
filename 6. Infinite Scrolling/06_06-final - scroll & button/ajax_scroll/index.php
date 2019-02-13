@@ -34,7 +34,7 @@
     <script>
 
       var container = document.getElementById('blog-posts');
-      var load_more = document.getElementById('load-more');
+      var load_more_button = document.getElementById('load-more');
       var spinner = document.getElementById("spinner");
       var request_in_progress = false;
 
@@ -46,12 +46,12 @@
         spinner.style.display = 'none';
       }
 
-      function showLoadMore() {
-        load_more.style.display = 'inline';
+      function showLoadMoreButton() {
+        load_more_button.style.display = 'inline';
       }
 
-      function hideLoadMore() {
-        load_more.style.display = 'none';
+      function hideLoadMoreButton() {
+        load_more_button.style.display = 'none';
       }
 
       function appendToDiv(div, new_html) {
@@ -75,12 +75,14 @@
 
       function setCurrentPage(page) {
         console.log('Incrementing page to: ' + page);
-        load_more.setAttribute('data-page', page);
+        load_more_button.setAttribute('data-page', page);
       }
 
       function scrollReaction() {
         var content_height = container.offsetHeight;
         var current_y = window.innerHeight + window.pageYOffset;
+        console.log(window.innerHeight); //fixed
+        console.log(window.pageYOffset);
         console.log(current_y + '/' + content_height);
         if(current_y >= content_height) {
           loadMore();
@@ -88,14 +90,14 @@
       }
 
       function loadMore() {
-// prevents multiple ajax requests with scrolling
+// *prevents multiple ajax requests with scrolling*
         if (request_in_progress) { return; }
         else { request_in_progress = true; }
 
         showSpinner();
-        hideLoadMore();
+        hideLoadMoreButton();
 
-        var page = parseInt(load_more.getAttribute('data-page'));
+        var page = parseInt(load_more_button.getAttribute('data-page'));
         var next_page = page + 1;
 
         var xhr = new XMLHttpRequest();
@@ -110,18 +112,16 @@
             setCurrentPage(next_page);
             // append results to end of blog posts
             appendToDiv(container, result);
-            showLoadMore();
+            showLoadMoreButton();
             request_in_progress = false;
           }
         };
         xhr.send();
       }
 
-      load_more.addEventListener("click", loadMore);
+      load_more_button.addEventListener("click", loadMore);
 
-      window.onscroll = function() {
-        scrollReaction();
-      }
+      window.addEventListener("scroll", scrollReaction); // alt1
 
       // Load even the first page with Ajax
       loadMore();
@@ -129,3 +129,8 @@
 
   </body>
 </html>
+<!-- alt1: 
+  window.onscroll = function() {
+    scrollReaction();
+  }
+-->

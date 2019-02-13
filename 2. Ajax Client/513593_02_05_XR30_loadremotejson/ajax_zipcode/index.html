@@ -23,8 +23,8 @@
     </div>
 
     <script>
-      // Google asks for all API users to sign up for an API key
-      // For simple tests, still works without an API key
+// DOESNT WORK!
+// Google asks for all API users to sign up for an API key
       var api = 'http://maps.googleapis.com/maps/api/geocode/json';
 
       function findLocation() {
@@ -37,7 +37,7 @@
           if(xhr.readyState < 4) { // we didnt get back full response yet
             showLoading();
           }
-          if(xhr.readyState == 4 && xhr.status == 200) { // full response & successful
+          if(xhr.readyState == 4 && xhr.status == 200) {//full response & successful
             outputLocation(xhr.responseText);
           }
         };

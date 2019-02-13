@@ -32,7 +32,8 @@
         Height: <input type="text" name="height" /><br />
         <br />
         <input id="submit" type="submit" value="Submit" />
-<!-- we use just 1 button for both ajax requests on js enabled users and html form requests 4 users with js disabled. we prevent default behavior for ajax requests -->        
+        <!-- alt: <button id="submit">Submit</button> -->
+<!-- *we use just 1 button for both ajax requests on js enabled users and html form requests (direct php) on js disabled users. we prevented default behavior for ajax requests at the bottom of the page* -->   
       </form>
     </div>
 
@@ -153,7 +154,7 @@
       }
 
       button.addEventListener("click", function(event) {
-        event.preventDefault(); // matters
+        event.preventDefault();//matters 2 prevent html form request (php) in form
         calculateMeasurements();
       });
 
